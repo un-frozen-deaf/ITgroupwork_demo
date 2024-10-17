@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>フレンチコース体験</title>
+    <title>ITグループワーク</title>
     <style>
       body {
         display: flex;
@@ -39,26 +39,32 @@
     </style>
   </head>
   <body>
-    <h1>質問 1</h1>
+    <h4>
+      ここでは、4つの選択肢があり、そのうち1つが正解です。どれが正しい選択肢でしょうか？
+    </h4>
     <div class="choices-container">
       <div class="choice" id="choice1">
         <img src="images/image_menu1.jpg" alt="選択肢 1" />
-        <p>
-          まずサーモンのタルタルをそのまま食べ、​その後アボカドムースを少量混ぜながら​味の変化を楽しむ​
-        </p>
-        <button onclick="selectChoice('choice1')">選択</button>
+        <p>配色の変更</p>
+        <button onclick="selectChoice('choice')">選択</button>
       </div>
 
       <div class="choice" id="choice2">
         <img src="images/image_menu1.jpg" alt="選択肢 2" />
-        <p>タルタルとアボカドムースを同量ずつ混ぜて食べる​</p>
+        <p>画像の読み込み最適化​​</p>
         <button onclick="selectChoice('choice2')">選択</button>
       </div>
 
       <div class="choice" id="choice3">
         <img src="images/image_menu1.jpg" alt="選択肢 3" />
-        <p>タルタルの上にアボカドムースを一気に全て乗せて​食べる​</p>
+        <p>メニューアイコンの追加​</p>
         <button onclick="selectChoice('choice3')">選択</button>
+      </div>
+
+      <div class="choice" id="choice4">
+        <img src="images/image_menu1.jpg" alt="選択肢 3" />
+        <p>フォントサイズの統一​</p>
+        <button onclick="selectChoice('choice4')">選択</button>
       </div>
     </div>
 
@@ -68,7 +74,7 @@
         localStorage.setItem("selectedChoice1", choiceId);
 
         // 次のページへ遷移 (Ans_Q1.html)
-        window.location.href = "Q1_Ans.html";
+        window.location.href = "End.html";
       }
     </script>
   </body>

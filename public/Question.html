@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>フレンチコース体験</title>
+    <title>ITグループワーク</title>
     <style>
       body {
         display: flex;
@@ -31,15 +31,12 @@
   <body>
     <!-- 画像を表示するボックス -->
     <div id="image-box">
-      <img src="images/image_menu1.jpg" alt="質問の画像" />
+      <img id="display-image" src="Images/image_A.jpg" alt="画像" />
     </div>
 
     <!-- 音声再生 -->
-    <audio id="audio" autoplay>
-      <source
-        src="audio\01_トリュフ香るサーモンのタルタル アボカドムースと共に.wav"
-        type="audio/wav"
-      />
+    <audio id="audio-player">
+      <source id="audio-source" src="audio/audio1.mp3" type="audio/mp3" />
       あなたのブラウザは音声再生をサポートしていません。
     </audio>
 
@@ -47,17 +44,38 @@
     <button id="next-btn">選択に進む</button>
 
     <script>
-      // 「選択に進む」ボタンがクリックされたときの処理
-      document
-        .getElementById("next-btn")
-        .addEventListener("click", function () {
-          // Select_Q1.html へ遷移
-          window.location.href = "Q1_Select.html";
-        });
+      // 音声と画像のペアを定義
+      const media = [
+        { audio: "audio/audio1.mp3", image: "Images/image_A.jpg" },
+        { audio: "audio/audio2.mp3", image: "Images/image_B.jpg" },
+        { audio: "audio/audio3.mp3", image: "Images/image_C.jpg" },
+        { audio: "audio/audio4.mp3", image: "Images/image_A.jpg" },
+        { audio: "audio/audio5.mp3", image: "Images/image_B.jpg" },
+        { audio: "audio/audio6.mp3", image: "Images/image_C.jpg" },
+      ];
 
-      // 音声を再生する処理
-      const audio = document.getElementById("audio");
-      audio.play();
+      let currentIndex = 0;
+      const audioPlayer = document.getElementById("audio-player");
+      const audioSource = document.getElementById("audio-source");
+      const displayImage = document.getElementById("display-image");
+
+      // 音声再生終了時のイベントリスナー
+      audioPlayer.addEventListener("ended", () => {
+        currentIndex = (currentIndex + 1) % media.length;
+        audioSource.src = media[currentIndex].audio;
+        displayImage.src = media[currentIndex].image;
+        audioPlayer.load();
+        audioPlayer.play();
+      });
+
+      // 初回の音声再生
+      audioPlayer.play();
+
+      // 「選択に進む」ボタンがクリックされたときの処理
+      document.getElementById("next-btn").addEventListener("click", () => {
+        // Select_Q1.html へ遷移
+        window.location.href = "Select.html";
+      });
     </script>
   </body>
 </html>
