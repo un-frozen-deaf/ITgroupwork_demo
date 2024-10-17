@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>フレンチコース体験</title>
+    <style>
+      body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+        font-family: Arial, sans-serif;
+        flex-direction: column;
+      }
+      img {
+        display: block;
+        margin: 10px auto;
+        max-width: 90%;
+        height: auto;
+      }
+      button {
+        padding: 10px 20px;
+        font-size: 1em;
+        cursor: pointer;
+        margin-top: 20px;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- 画像を表示するボックス -->
+    <div id="image-box">
+      <img src="images/image_menu1.jpg" alt="質問の画像" />
+    </div>
+
+    <!-- 音声再生 -->
+    <audio id="audio" autoplay>
+      <source
+        src="audio\01_トリュフ香るサーモンのタルタル アボカドムースと共に.wav"
+        type="audio/wav"
+      />
+      あなたのブラウザは音声再生をサポートしていません。
+    </audio>
+
+    <!-- 「選択に進む」ボタン -->
+    <button id="next-btn">選択に進む</button>
+
+    <script>
+      // 「選択に進む」ボタンがクリックされたときの処理
+      document
+        .getElementById("next-btn")
+        .addEventListener("click", function () {
+          // Select_Q1.html へ遷移
+          window.location.href = "Q1_Select.html";
+        });
+
+      // 音声を再生する処理
+      const audio = document.getElementById("audio");
+      audio.play();
+    </script>
+  </body>
+</html>

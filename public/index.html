@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>フレンチコース体験</title>
+    <style>
+      body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+        font-family: Arial, sans-serif;
+        flex-direction: column;
+      }
+      img {
+        display: block;
+        margin: 10px auto;
+        max-width: 90%;
+        height: auto;
+      }
+      #text-box {
+        width: 90%;
+        text-align: center;
+        font-size: 1.2em;
+        margin-bottom: 20px;
+      }
+      .button-container {
+        display: flex;
+        justify-content: space-between;
+        width: 200px;
+      }
+      button {
+        padding: 10px 20px;
+        font-size: 1em;
+        cursor: pointer;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- 画像を表示するボックス -->
+    <div id="image-box">
+      <img
+        id="display-image"
+        src="images\image_restaurant.jpg"
+        alt="表示中の画像"
+      />
+    </div>
+
+    <!-- テキストを表示するボックス -->
+    <div id="text-box">
+      あなたは著名なグルメライターとして、人目を避けて高級レストランに訪れました。​
+    </div>
+
+    <!-- ボタンコンテナ -->
+    <div class="button-container">
+      <button id="prev-btn" disabled>戻る</button>
+      <button id="next-btn">進む</button>
+    </div>
+
+    <script>
+      // 画像とテキストのデータ
+      const texts = [
+        "あなたは著名なグルメライターとして、あなたは人目を避けて高級レストランに訪れました。​",
+        "執事が料理をサーブし、各料理の楽しみ方を説明します。",
+      ];
+
+      const images = [
+        "images/image_restaurant.jpg", // 最初の画像ファイル名
+        "images/image_serve.jpg", // 2番目の画像ファイル名
+      ];
+
+      let currentTextIndex = 0;
+
+      const textBox = document.getElementById("text-box");
+      const imageBox = document.getElementById("display-image");
+      const prevBtn = document.getElementById("prev-btn");
+      const nextBtn = document.getElementById("next-btn");
+
+      // ボタンの状態更新
+      function updateButtons() {
+        prevBtn.disabled = currentTextIndex === 0;
+        nextBtn.textContent =
+          currentTextIndex === texts.length - 1 ? "次へ" : "進む";
+      }
+
+      // 「進む」ボタンのクリックイベント
+      nextBtn.addEventListener("click", () => {
+        if (currentTextIndex < texts.length - 1) {
+          currentTextIndex++;
+          textBox.textContent = texts[currentTextIndex];
+          imageBox.src = images[currentTextIndex];
+          updateButtons();
+        } else {
+          window.location.href = "Q1.html"; // 次のページに遷移
+        }
+      });
+
+      // 「戻る」ボタンのクリックイベント
+      prevBtn.addEventListener("click", () => {
+        if (currentTextIndex > 0) {
+          currentTextIndex--;
+          textBox.textContent = texts[currentTextIndex];
+          imageBox.src = images[currentTextIndex];
+          updateButtons();
+        }
+      });
+
+      updateButtons(); // 初期状態を更新
+    </script>
+  </body>
+</html>

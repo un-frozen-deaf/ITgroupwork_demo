@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>フレンチコース体験</title>
+    <style>
+      body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+        font-family: Arial, sans-serif;
+        flex-direction: column;
+      }
+      .choices-container {
+        display: flex;
+        justify-content: space-between;
+        width: 600px; /* 横に並べる幅を調整 */
+      }
+      .choice {
+        margin: 10px;
+        padding: 10px;
+        border: 1px solid #ccc;
+        text-align: center;
+        width: 150px;
+      }
+      .choice img {
+        max-width: 100%;
+        height: auto;
+      }
+      button {
+        margin-top: 10px;
+        padding: 10px;
+        font-size: 1em;
+        cursor: pointer;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>質問 1</h1>
+    <div class="choices-container">
+      <div class="choice" id="choice1">
+        <img src="images/image_menu1.jpg" alt="選択肢 1" />
+        <p>
+          まずサーモンのタルタルをそのまま食べ、​その後アボカドムースを少量混ぜながら​味の変化を楽しむ​
+        </p>
+        <button onclick="selectChoice('choice1')">選択</button>
+      </div>
+
+      <div class="choice" id="choice2">
+        <img src="images/image_menu1.jpg" alt="選択肢 2" />
+        <p>タルタルとアボカドムースを同量ずつ混ぜて食べる​</p>
+        <button onclick="selectChoice('choice2')">選択</button>
+      </div>
+
+      <div class="choice" id="choice3">
+        <img src="images/image_menu1.jpg" alt="選択肢 3" />
+        <p>タルタルの上にアボカドムースを一気に全て乗せて​食べる​</p>
+        <button onclick="selectChoice('choice3')">選択</button>
+      </div>
+    </div>
+
+    <script>
+      function selectChoice(choiceId) {
+        // 選択した内容を localStorage に保存
+        localStorage.setItem("selectedChoice1", choiceId);
+
+        // 次のページへ遷移 (Ans_Q1.html)
+        window.location.href = "Q1_Ans.html";
+      }
+    </script>
+  </body>
+</html>
