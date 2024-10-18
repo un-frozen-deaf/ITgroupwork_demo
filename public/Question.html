@@ -14,20 +14,24 @@
         font-family: Arial, sans-serif;
         flex-direction: column;
         position: relative;
+        overflow: hidden; /* はみ出さないようにする */
       }
       #image-box {
         display: flex;
         justify-content: center;
         flex-wrap: wrap;
         width: 100%;
+        margin-bottom: 20px; /* ボタンとの間に余白を追加 */
       }
       #image-box img.single {
-        max-width: 90%; /* 1つ表示される場合はウィンドウ幅に対応して大きく表示 */
+        max-width: 90%; /* 1つ表示される場合はウィンドウ幅の90% */
+        max-height: 80vh; /* 高さを画面の40%に制限 */
         height: auto;
         margin: 10px auto;
       }
       #image-box img.multi {
-        max-width: 20%; /* 3つ並べる場合の各画像の幅 */
+        max-width: 28%; /* 3つ並べる場合の各画像の幅 */
+        max-height: 30vh; /* 各画像の最大高さを30%に制限 */
         height: auto;
         margin: 10px;
       }
