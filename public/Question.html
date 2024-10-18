@@ -13,32 +13,73 @@
         margin: 0;
         font-family: Arial, sans-serif;
         flex-direction: column;
+        position: relative;
       }
-      img {
-        display: block;
-        margin: 10px auto;
-        max-width: 90%;
+      #image-box {
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+        width: 100%;
+      }
+      #image-box img.single {
+        max-width: 90%; /* 1つ表示される場合はウィンドウ幅に対応して大きく表示 */
         height: auto;
+        margin: 10px auto;
+      }
+      #image-box img.multi {
+        max-width: 25%; /* 3つ並べる場合の各画像の幅 */
+        height: auto;
+        margin: 10px;
       }
       button {
         padding: 10px 20px;
         font-size: 1em;
         cursor: pointer;
         margin-top: 20px;
+        display: none; /* 初期状態では非表示 */
+      }
+      #audio-icon {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        width: 50px;
+        display: none; /* 初期状態では非表示 */
+      }
+      .blinking {
+        animation: blink 1s infinite;
+      }
+      @keyframes blink {
+        0% {
+          opacity: 1;
+        }
+        50% {
+          opacity: 0;
+        }
+        100% {
+          opacity: 1;
+        }
       }
     </style>
   </head>
   <body>
     <!-- 画像を表示するボックス -->
     <div id="image-box">
-      <img id="display-image" src="Images/image_A.jpg" alt="画像" />
+      <img
+        id="display-image"
+        src="Images/image_A.jpg"
+        alt="画像"
+        class="single"
+      />
     </div>
 
     <!-- 音声再生 -->
     <audio id="audio-player">
-      <source id="audio-source" src="audio/audio1.mp3" type="audio/mp3" />
+      <source id="audio-source" src="audios/IT-A01.wav" type="audio/wav" />
       あなたのブラウザは音声再生をサポートしていません。
     </audio>
+
+    <!-- 音声再生中に表示するアイコン -->
+    <img id="audio-icon" src="Images/audio_icon.png" alt="音声アイコン" />
 
     <!-- 「選択に進む」ボタン -->
     <button id="next-btn">選択に進む</button>
@@ -46,33 +87,83 @@
     <script>
       // 音声と画像のペアを定義
       const media = [
+        { audio: "audios/IT-A01.wav", image: "Images/image_A.jpg" },
+        { audio: "audios/IT-B01.wav", image: "Images/image_B.jpg" },
+        { audio: "audios/IT-C01.wav", image: "Images/image_C.jpg" },
         {
-          audio: "C:audios\IT-A01_今回のリリースに向けて.wav",
-          image: "Images/image_A.jpg",
+          audio: "audios/IT-A02.wav",
+          images: [
+            "Images/image_A.jpg",
+            "Images/image_B.jpg",
+            "Images/image_C.jpg",
+          ],
         },
-        { audio: "audio/audio2.mp3", image: "Images/image_B.jpg" },
-        { audio: "audio/audio3.mp3", image: "Images/image_C.jpg" },
-        { audio: "audio/audio4.mp3", image: "Images/image_A.jpg" },
-        { audio: "audio/audio5.mp3", image: "Images/image_B.jpg" },
-        { audio: "audio/audio6.mp3", image: "Images/image_C.jpg" },
+        {
+          audio: "audios/IT-B02.wav",
+          images: [
+            "Images/image_A.jpg",
+            "Images/image_B.jpg",
+            "Images/image_C.jpg",
+          ],
+        },
+        {
+          audio: "audios/IT-C02.wav",
+          images: [
+            "Images/image_A.jpg",
+            "Images/image_B.jpg",
+            "Images/image_C.jpg",
+          ],
+        },
       ];
 
       let currentIndex = 0;
       const audioPlayer = document.getElementById("audio-player");
       const audioSource = document.getElementById("audio-source");
-      const displayImage = document.getElementById("display-image");
+      const imageBox = document.getElementById("image-box");
+      const nextButton = document.getElementById("next-btn");
+      const audioIcon = document.getElementById("audio-icon");
+
+      // 音声再生開始時にアイコンを点滅させる
+      function startBlinkingIcon() {
+        audioIcon.style.display = "block";
+        audioIcon.classList.add("blinking");
+      }
+
+      // 音声再生終了時にアイコンを非表示にする
+      function stopBlinkingIcon() {
+        audioIcon.style.display = "none";
+        audioIcon.classList.remove("blinking");
+      }
 
       // 音声再生終了時のイベントリスナー
       audioPlayer.addEventListener("ended", () => {
-        currentIndex = (currentIndex + 1) % media.length;
-        audioSource.src = media[currentIndex].audio;
-        displayImage.src = media[currentIndex].image;
-        audioPlayer.load();
-        audioPlayer.play();
+        currentIndex++;
+        if (currentIndex < media.length) {
+          if (currentIndex < 3) {
+            // 1つずつ画像を表示する場合
+            imageBox.innerHTML = `<img src="${media[currentIndex].image}" alt="画像" class="single" />`;
+          } else {
+            // 4つ目以降は3つの画像を並べて表示する
+            imageBox.innerHTML = media[currentIndex].images
+              .map((image) => `<img src="${image}" alt="画像" class="multi" />`)
+              .join("");
+          }
+
+          audioSource.src = media[currentIndex].audio;
+          audioPlayer.load();
+          audioPlayer.play();
+          startBlinkingIcon(); // アイコンを点滅開始
+        } else {
+          // 最後の音声の再生が終わったら停止
+          audioPlayer.pause();
+          stopBlinkingIcon(); // アイコンの点滅停止
+          nextButton.style.display = "block"; // ボタンを表示
+        }
       });
 
-      // 初回の音声再生
+      // 初回の音声再生とアイコン点滅開始
       audioPlayer.play();
+      startBlinkingIcon();
 
       // 「選択に進む」ボタンがクリックされたときの処理
       document.getElementById("next-btn").addEventListener("click", () => {
