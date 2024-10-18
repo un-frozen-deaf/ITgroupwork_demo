@@ -16,25 +16,44 @@
       }
       .choices-container {
         display: flex;
-        justify-content: space-between;
-        width: 600px; /* 横に並べる幅を調整 */
+        flex-direction: column; /* 選択肢を縦に並べる */
+        align-items: center;
+        width: 100%; /* 全体幅を使用 */
       }
       .choice {
-        margin: 10px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 80%; /* 横幅を調整 */
+        margin: 10px 0;
         padding: 10px;
         border: 1px solid #ccc;
-        text-align: center;
-        width: 150px;
+        text-align: left; /* 左寄せに設定 */
+        box-sizing: border-box;
       }
-      .choice img {
-        max-width: 100%;
-        height: auto;
+      /* 背景色を個別に設定 */
+      .choice:nth-child(1) {
+        background-color: rgba(173, 216, 230, 0.5); /* 薄い青 */
       }
-      button {
-        margin-top: 10px;
+      .choice:nth-child(2) {
+        background-color: rgba(255, 182, 193, 0.5); /* 薄い赤 */
+      }
+      .choice:nth-child(3) {
+        background-color: rgba(144, 238, 144, 0.5); /* 薄い緑 */
+      }
+      .choice:nth-child(4) {
+        background-color: rgba(255, 255, 224, 0.5); /* 薄い黄色 */
+      }
+      .choice p {
+        margin: 0;
+        flex: 1;
+      }
+      .choice button {
+        margin-left: 20px;
         padding: 10px;
         font-size: 1em;
         cursor: pointer;
+        white-space: nowrap; /* ボタン内の文字が折り返されないようにする */
       }
     </style>
   </head>
@@ -45,21 +64,36 @@
     <div class="choices-container">
       <div class="choice" id="choice1">
         <p>配色の変更</p>
-        <button onclick="selectChoice('choice')">選択</button>
+        <p>
+          -
+          メイン画面の配色を変えて、もっと派手にしました。これでユーザーの視覚的なインパクトが強くなると思います。
+        </p>
+        <button onclick="selectChoice('choice1')">選択</button>
       </div>
 
       <div class="choice" id="choice2">
-        <p>画像の読み込み最適化​​</p>
+        <p>画像の読み込み最適化</p>
+        <p>
+          -
+          画像の読み込みを最適化しました。特にトップページの大きな画像を圧縮し、表示速度が大幅に改善されました。これでユーザー体験がスムーズになると思います。
+        </p>
         <button onclick="selectChoice('choice2')">選択</button>
       </div>
 
       <div class="choice" id="choice3">
-        <p>メニューアイコンの追加​</p>
+        <p>メニューアイコンの追加</p>
+        <p>
+          - ユーザビリティを向上させるためにメニューにアイコンを追加します。
+        </p>
         <button onclick="selectChoice('choice3')">選択</button>
       </div>
 
       <div class="choice" id="choice4">
-        <p>フォントサイズの統一​</p>
+        <p>フォントサイズの統一</p>
+        <p>
+          -
+          全体のフォントサイズを統一しました。これで見た目が一貫してきれいに見えると思います。
+        </p>
         <button onclick="selectChoice('choice4')">選択</button>
       </div>
     </div>
@@ -69,7 +103,7 @@
         // 選択した内容を localStorage に保存
         localStorage.setItem("selectedChoice1", choiceId);
 
-        // 次のページへ遷移 (Ans_Q1.html)
+        // 次のページへ遷移 (End.html)
         window.location.href = "End.html";
       }
     </script>
