@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>終了ページ</title>
+    <title>ITプロジェクト</title>
     <style>
       body {
         font-family: Arial, sans-serif;
@@ -11,15 +11,20 @@
         margin: 0;
         padding: 20px;
         background-color: #f4f4f4;
+        position: relative;
       }
       h1 {
         color: #333;
       }
-      img {
-        display: block;
-        margin: 10px auto;
-        max-width: 90%;
+      .image-container {
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+      }
+      .image-container img {
+        max-width: 30%; /* 3つ並べて表示 */
         height: auto;
+        margin: 10px;
       }
       .buttons {
         margin-top: 20px;
@@ -33,15 +38,39 @@
         font-size: 16px;
         cursor: pointer;
         margin: 10px;
+        display: none; /* 初期状態では非表示 */
       }
       button:hover {
         background-color: #45a049;
+      }
+      #audio-icon {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        width: 50px;
+        display: none; /* 初期状態では非表示 */
+      }
+      .blinking {
+        animation: blink 1s infinite;
+      }
+      @keyframes blink {
+        0% {
+          opacity: 1;
+        }
+        50% {
+          opacity: 0;
+        }
+        100% {
+          opacity: 1;
+        }
       }
     </style>
   </head>
   <body>
     <h1>結果</h1>
-    <img id="result-image" src="images/image_restaurant.jpg" alt="結果画像" />
+    <div class="image-container" id="image-container"></div>
+    <img id="audio-icon" src="images/audio_icon.png" alt="音声アイコン" />
+
     <p id="result-message"></p>
 
     <div class="buttons">
@@ -50,53 +79,116 @@
     </div>
 
     <script>
-      // 正しい答えのパターン
-      const correctAnswers = ["choice1", "choice3", "choice3"];
-
       // localStorage から選択した内容を取得
       const selectedChoice1 = localStorage.getItem("selectedChoice1");
-      const selectedChoice2 = localStorage.getItem("selectedChoice2");
-      const selectedChoice3 = localStorage.getItem("selectedChoice3");
 
-      const selectedChoices = [
-        selectedChoice1,
-        selectedChoice2,
-        selectedChoice3,
-      ];
+      // エピソードごとの画像と音声
+      const episodes = {
+        choice1: {
+          images: [
+            "images/image_A_bad.jpg",
+            "images/image_B_bad.jpg",
+            "images/image_C_bad.jpg",
+          ],
+          audios: [
+            "audios/IT-A04.wav",
+            "audios/IT-B04.wav",
+            "audios/IT-C04.wav",
+          ],
+          message: "残念！",
+        },
+        choice2: {
+          images: [
+            "images/image_A_good.jpg",
+            "images/image_B_good.jpg",
+            "images/image_C_good.jpg",
+          ],
+          audios: [
+            "audios/IT-A03.wav",
+            "audios/IT-B03.wav",
+            "audios/IT-C03.wav",
+          ],
+          message: "正解！",
+        },
+        choice3: {
+          images: [
+            "images/image_A_bad.jpg",
+            "images/image_B_bad.jpg",
+            "images/image_C_bad.jpg",
+          ],
+          audios: [
+            "audios/IT-A05.wav",
+            "audios/IT-B05.wav",
+            "audios/IT-C05.wav",
+          ],
+          message: "残念！",
+        },
+        choice4: {
+          images: [
+            "images/image_A_bad.jpg",
+            "images/image_B_bad.jpg",
+            "images/image_C_bad.jpg",
+          ],
+          audios: [
+            "audios/IT-A06.wav",
+            "audios/IT-B06.wav",
+            "audios/IT-C06.wav",
+          ],
+          message: "残念！",
+        },
+      };
 
-      // 一致している答えの数をカウント
-      let matchCount = 0;
-      for (let i = 0; i < correctAnswers.length; i++) {
-        if (selectedChoices[i] === correctAnswers[i]) {
-          matchCount++;
-        }
-      }
-
-      // 合致した数に応じてメッセージと画像を表示
+      const audioIcon = document.getElementById("audio-icon");
+      const imageContainer = document.getElementById("image-container");
       const resultMessage = document.getElementById("result-message");
-      const resultImage = document.getElementById("result-image");
 
-      switch (matchCount) {
-        case 3:
-          resultMessage.textContent =
-            "完璧な体験でした！あなたは料理の真髄をしっかりと捉え、その楽しみ方を完全に理解しました。あなたが書く記事には、レストランの料理の本当の魅力が詳細に伝えられることでしょう。この記事は多くの読者に強い影響を与え、レストランの評判が一層高まることが予想されます。レストランはあなたのレビューによって新たな注目を浴びるでしょう。";
-          resultImage.src = "images/image_great.jpg"; // 全て正解した場合の画像
-          break;
-        case 2:
-          resultMessage.textContent =
-            "良い選択でしたが、いくつかのポイントで微調整が必要でした。それでも、あなたの記事にはレストランの魅力が十分に伝えられることでしょう。読者には料理の楽しみ方が伝わり、レストランの評価にはプラスの影響を与えることが期待されます。次回の訪問でさらに正確な体験を得ることで、記事の質がさらに向上するでしょう。";
-          resultImage.src = "images/image_nice.jpg"; // 2つ正解した場合の画像
-          break;
-        case 1:
-          resultMessage.textContent =
-            "いくつかの良い選択がありましたが、全体的に体験がやや不完全だったかもしれません。あなたの記事には一定の内容が反映されますが、料理の真髄を完全に伝えるには若干の改善が必要です。レストランの評価にはやや控えめな影響があり、次回の訪問での体験がさらに豊かになることを期待しています。";
-          resultImage.src = "images/image_umm.jpg"; // 1つ正解した場合の画像
-          break;
-        default:
-          resultMessage.textContent =
-            "残念ながら、すべての選択肢が料理の楽しみ方とは異なっていました。あなたの記事には、レストランの料理についての正確な情報が伝わらず、結果としてレストランの評価があまり良くないものになる可能性があります。次回の訪問時には、説明をよく聞き、より適切な体験を通じて、記事の内容を改善することをおすすめします。";
-          resultImage.src = "images/image_badend.jpg"; // 正解がない場合の画像
+      // 選択に応じてエピソードを再生
+      function playEpisode(choice) {
+        const { images, audios, message } = episodes[choice];
+
+        // 画像を表示
+        imageContainer.innerHTML = images
+          .map((src) => `<img src="${src}" alt="エピソード画像" />`)
+          .join("");
+
+        // メッセージを表示
+        resultMessage.textContent = message;
+
+        let audioIndex = 0;
+        const audioPlayer = new Audio(audios[audioIndex]);
+        startBlinkingIcon();
+
+        audioPlayer.addEventListener("ended", function () {
+          audioIndex++;
+          if (audioIndex < audios.length) {
+            audioPlayer.src = audios[audioIndex];
+            audioPlayer.play();
+          } else {
+            stopBlinkingIcon();
+            showButtons(); // 音声がすべて再生終了後にボタンを表示
+          }
+        });
+
+        audioPlayer.play();
       }
+
+      function startBlinkingIcon() {
+        audioIcon.style.display = "block";
+        audioIcon.classList.add("blinking");
+      }
+
+      function stopBlinkingIcon() {
+        audioIcon.style.display = "none";
+        audioIcon.classList.remove("blinking");
+      }
+
+      function showButtons() {
+        document.getElementById("retry-button").style.display = "inline-block";
+        document.getElementById("exit-button").style.display = "inline-block";
+      }
+
+      // 選択された内容に応じてエピソードを再生
+      playEpisode(selectedChoice1);
 
       // ボタンのイベントリスナーを追加
       document
