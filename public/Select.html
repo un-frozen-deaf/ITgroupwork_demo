@@ -26,10 +26,17 @@
         align-items: center;
         width: 80%; /* 横幅を調整 */
         margin: 10px 0;
-        padding: 10px;
+        padding: 20px;
         border: 1px solid #ccc;
         text-align: left; /* 左寄せに設定 */
         box-sizing: border-box;
+        cursor: pointer; /* クリック可能に */
+        transition: background-color 0.3s ease;
+      }
+      .choice:hover {
+        background-color: #343232; /* ホバー時の色変更 */
+        transition: background-color 0.3s ease; /* 背景色を0.3秒で変化 */
+        transform: scale(1.1); /* 少し大きく */
       }
       /* 背景色を個別に設定 */
       .choice:nth-child(1) {
@@ -48,13 +55,6 @@
         margin: 0;
         flex: 1;
       }
-      .choice button {
-        margin-left: 20px;
-        padding: 10px;
-        font-size: 1em;
-        cursor: pointer;
-        white-space: nowrap; /* ボタン内の文字が折り返されないようにする */
-      }
     </style>
   </head>
   <body>
@@ -62,39 +62,35 @@
       ここでは、4つの選択肢があり、そのうち1つが正解です。どれが正しい選択肢でしょうか？
     </h3>
     <div class="choices-container">
-      <div class="choice" id="choice1">
+      <div class="choice" id="choice1" onclick="selectChoice('choice1')">
         <p>配色の変更</p>
         <p>
           -
           メイン画面の配色を変えて、もっと派手にしました。これでユーザーの視覚的なインパクトが強くなると思います。
         </p>
-        <button onclick="selectChoice('choice1')">選択</button>
       </div>
 
-      <div class="choice" id="choice2">
+      <div class="choice" id="choice2" onclick="selectChoice('choice2')">
         <p>画像の読み込み最適化</p>
         <p>
           -
           画像の読み込みを最適化しました。特にトップページの大きな画像を圧縮し、表示速度が大幅に改善されました。これでユーザー体験がスムーズになると思います。
         </p>
-        <button onclick="selectChoice('choice2')">選択</button>
       </div>
 
-      <div class="choice" id="choice3">
+      <div class="choice" id="choice3" onclick="selectChoice('choice3')">
         <p>メニューアイコンの追加</p>
         <p>
           - ユーザビリティを向上させるためにメニューにアイコンを追加します。
         </p>
-        <button onclick="selectChoice('choice3')">選択</button>
       </div>
 
-      <div class="choice" id="choice4">
+      <div class="choice" id="choice4" onclick="selectChoice('choice4')">
         <p>フォントサイズの統一</p>
         <p>
           -
           全体のフォントサイズを統一しました。これで見た目が一貫してきれいに見えると思います。
         </p>
-        <button onclick="selectChoice('choice4')">選択</button>
       </div>
     </div>
 

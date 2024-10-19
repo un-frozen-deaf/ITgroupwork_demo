@@ -66,12 +66,9 @@
     </style>
   </head>
   <body>
-    <div id="image-box">
-      <!-- 初期の画像は削除し、JavaScriptで設定 -->
-    </div>
+    <div id="image-box"></div>
 
     <audio id="audio-player">
-      <!-- 初期のaudio sourceも削除し、JavaScriptで設定 -->
       あなたのブラウザは音声再生をサポートしていません。
     </audio>
 
@@ -79,139 +76,50 @@
     <button id="next-btn">選択に進む</button>
 
     <script>
-      // 音声と画像のペアを定義
-      const mediaMode1 = [
-        { audio: "audios/IT-A01_S.wav", image: "Images/image_A.jpg" },
-        { audio: "audios/IT-B01_S.wav", image: "Images/image_B.jpg" },
-        { audio: "audios/IT-C01_S.wav", image: "Images/image_C.jpg" },
-        {
-          audio: "audios/IT-A02_S.wav",
-          images: [
-            "Images/image_A.jpg",
-            "Images/image_B.jpg",
-            "Images/image_C.jpg",
-          ],
-        },
-        {
-          audio: "audios/IT-B02_S.wav",
-          images: [
-            "Images/image_A.jpg",
-            "Images/image_B.jpg",
-            "Images/image_C.jpg",
-          ],
-        },
-        {
-          audio: "audios/IT-C02_S.wav",
-          images: [
-            "Images/image_A.jpg",
-            "Images/image_B.jpg",
-            "Images/image_C.jpg",
-          ],
-        },
+      // 画像の順番と音声のパターンを利用
+      const images = [
+        "Images/image_A.jpg", // IT-A01
+        "Images/image_B.jpg", // IT-B01
+        "Images/image_C.jpg", // IT-C01
+        ["Images/image_A.jpg", "Images/image_B.jpg", "Images/image_C.jpg"], // IT-A02
+        ["Images/image_A.jpg", "Images/image_B.jpg", "Images/image_C.jpg"], // IT-B02
+        ["Images/image_A.jpg", "Images/image_B.jpg", "Images/image_C.jpg"], // IT-C02
       ];
 
-      const mediaMode2 = [
-        { audio: "audios/IT-A01.wav", image: "Images/image_A.jpg" },
-        { audio: "audios/IT-B01.wav", image: "Images/image_B.jpg" },
-        { audio: "audios/IT-C01.wav", image: "Images/image_C.jpg" },
-        {
-          audio: "audios/IT-A02.wav",
-          images: [
-            "Images/image_A.jpg",
-            "Images/image_B.jpg",
-            "Images/image_C.jpg",
-          ],
-        },
-        {
-          audio: "audios/IT-B02.wav",
-          images: [
-            "Images/image_A.jpg",
-            "Images/image_B.jpg",
-            "Images/image_C.jpg",
-          ],
-        },
-        {
-          audio: "audios/IT-C02.wav",
-          images: [
-            "Images/image_A.jpg",
-            "Images/image_B.jpg",
-            "Images/image_C.jpg",
-          ],
-        },
-      ];
-
-      const mediaMode3 = [
-        { audio: "audios/IT-A01.wav", image: "Images/image_A.jpg" },
-        { audio: "audios/IT-B01.wav", image: "Images/image_B.jpg" },
-        { audio: "audios/IT-C01.wav", image: "Images/image_C.jpg" },
-        {
-          audio: "audios/IT-A02.wav",
-          images: [
-            "Images/image_A.jpg",
-            "Images/image_B.jpg",
-            "Images/image_C.jpg",
-          ],
-        },
-        {
-          audio: "audios/IT-B02.wav",
-          images: [
-            "Images/image_A.jpg",
-            "Images/image_B.jpg",
-            "Images/image_C.jpg",
-          ],
-        },
-        {
-          audio: "audios/IT-C02.wav",
-          images: [
-            "Images/image_A.jpg",
-            "Images/image_B.jpg",
-            "Images/image_C.jpg",
-          ],
-        },
-      ];
-
-      // モードに応じたメディアデータを選択
-      const mode = localStorage.getItem("selectedMode");
-      let media;
-
-      switch (mode) {
-        case "1":
-          media = mediaMode1;
-          break;
-        case "2":
-          media = mediaMode2;
-          break;
-        case "3":
-          media = mediaMode3;
-          break;
-        default:
-          media = mediaMode1;
-      }
+      const mode = localStorage.getItem("selectedMode") || "1"; // モード1をデフォルトとする
+      const audioSuffix = mode === "1" ? "S" : mode === "2" ? "F" : "A"; // モードに応じた接尾辞
 
       let currentIndex = 0;
       const audioPlayer = document.getElementById("audio-player");
-      const audioSource = document.createElement("source"); // 音声ソースを動的に作成
+      const audioSource = document.createElement("source");
       audioPlayer.appendChild(audioSource);
       const imageBox = document.getElementById("image-box");
       const nextButton = document.getElementById("next-btn");
       const audioIcon = document.getElementById("audio-icon");
 
-      // 最初の画像と音声を設定
+      // 音声と画像をロードする関数
       function loadMedia() {
-        if (media[currentIndex].images) {
-          // 複数の画像がある場合
-          imageBox.innerHTML = media[currentIndex].images
+        // 音声ファイル名を生成
+        const audioPrefix =
+          currentIndex < 3 ? ["A01", "B01", "C01"] : ["A02", "B02", "C02"];
+        audioSource.src = `audios/IT-${
+          audioPrefix[currentIndex % 3]
+        }_${audioSuffix}.wav`;
+        audioPlayer.load();
+        audioPlayer.play();
+
+        // 画像を設定
+        const imageContent = images[currentIndex];
+        if (Array.isArray(imageContent)) {
+          // 3枚並べるケース
+          imageBox.innerHTML = imageContent
             .map((image) => `<img src="${image}" alt="画像" class="multi" />`)
             .join("");
         } else {
-          // 単一の画像の場合
-          imageBox.innerHTML = `<img src="${media[currentIndex].image}" alt="画像" class="single" />`;
+          // 単一画像
+          imageBox.innerHTML = `<img src="${imageContent}" alt="画像" class="single" />`;
         }
 
-        // 音声を設定して再生
-        audioSource.src = media[currentIndex].audio;
-        audioPlayer.load();
-        audioPlayer.play();
         startBlinkingIcon();
       }
 
@@ -228,7 +136,7 @@
       // 音声再生終了後に次のメディアをロード
       audioPlayer.addEventListener("ended", () => {
         currentIndex++;
-        if (currentIndex < media.length) {
+        if (currentIndex < images.length) {
           loadMedia(); // 次の画像と音声をロード
         } else {
           stopBlinkingIcon();
@@ -236,7 +144,7 @@
         }
       });
 
-      // ページ読み込み時に最初のメディアをロード
+      // 初回ロード
       loadMedia();
 
       document.getElementById("next-btn").addEventListener("click", () => {

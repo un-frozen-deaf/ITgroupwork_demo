@@ -112,7 +112,7 @@
       prevBtn.addEventListener("click", () => {
         if (currentTextIndex > 0) {
           currentTextIndex--;
-          textBox.textContent = texts[currentTextIndex];
+          textBox.innerHTML = texts[currentTextIndex];
           imageBox.src = images[currentTextIndex];
           updateButtons();
         }

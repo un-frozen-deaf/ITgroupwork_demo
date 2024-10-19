@@ -81,8 +81,10 @@
     <script>
       // localStorage から選択した内容を取得
       const selectedChoice1 = localStorage.getItem("selectedChoice1");
+      const mode = localStorage.getItem("selectedMode") || "1"; // モード1をデフォルトとする
+      const audioSuffix = mode === "1" ? "S" : mode === "2" ? "F" : "A"; // モードに応じた接尾辞
 
-      // エピソードごとの画像と音声
+      // エピソードごとの画像と音声ファイルの番号
       const episodes = {
         choice1: {
           images: [
@@ -90,11 +92,7 @@
             "Images/image_B_bad.jpg",
             "Images/image_C_bad.jpg",
           ],
-          audios: [
-            "audios/IT-A04.wav",
-            "audios/IT-B04.wav",
-            "audios/IT-C04.wav",
-          ],
+          audioNumbers: [4, 4, 4],
           message: "残念！",
         },
         choice2: {
@@ -103,11 +101,7 @@
             "Images/image_B_good.jpg",
             "Images/image_C_good.jpg",
           ],
-          audios: [
-            "audios/IT-A03.wav",
-            "audios/IT-B03.wav",
-            "audios/IT-C03.wav",
-          ],
+          audioNumbers: [3, 3, 3],
           message: "正解！",
         },
         choice3: {
@@ -116,11 +110,7 @@
             "Images/image_B_bad.jpg",
             "Images/image_C_bad.jpg",
           ],
-          audios: [
-            "audios/IT-A05.wav",
-            "audios/IT-B05.wav",
-            "audios/IT-C05.wav",
-          ],
+          audioNumbers: [5, 5, 5],
           message: "残念！",
         },
         choice4: {
@@ -129,7 +119,7 @@
             "Images/image_B_bad.jpg",
             "Images/image_C_bad.jpg",
           ],
-          audios: ["audios/IT-A06.wav", "audios/IT-C06.wav"],
+          audioNumbers: [6, 6, 6],
           message: "残念！",
         },
       };
@@ -140,7 +130,7 @@
 
       // 選択に応じてエピソードを再生
       function playEpisode(choice) {
-        const { images, audios, message } = episodes[choice];
+        const { images, audioNumbers, message } = episodes[choice];
 
         // 画像を表示
         imageContainer.innerHTML = images
@@ -151,13 +141,21 @@
         resultMessage.textContent = message;
 
         let audioIndex = 0;
-        const audioPlayer = new Audio(audios[audioIndex]);
+        const audioFiles = audioNumbers.map(
+          (number) =>
+            `audios/IT-${
+              ["A", "B", "C"][audioIndex++]
+            }0${number}_${audioSuffix}.wav`
+        );
+
+        const audioPlayer = new Audio(audioFiles[0]);
+        audioIndex = 1; // 次の音声のインデックスを設定
         startBlinkingIcon();
 
         audioPlayer.addEventListener("ended", function () {
-          audioIndex++;
-          if (audioIndex < audios.length) {
-            audioPlayer.src = audios[audioIndex];
+          if (audioIndex < audioFiles.length) {
+            audioPlayer.src = audioFiles[audioIndex];
+            audioIndex++;
             audioPlayer.play();
           } else {
             stopBlinkingIcon();
