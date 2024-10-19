@@ -14,24 +14,24 @@
         font-family: Arial, sans-serif;
         flex-direction: column;
         position: relative;
-        overflow: hidden; /* はみ出さないようにする */
+        overflow: hidden;
       }
       #image-box {
         display: flex;
         justify-content: center;
         flex-wrap: wrap;
         width: 100%;
-        margin-bottom: 20px; /* ボタンとの間に余白を追加 */
+        margin-bottom: 20px;
       }
       #image-box img.single {
-        max-width: 90%; /* 1つ表示される場合はウィンドウ幅の90% */
-        max-height: 80vh; /* 高さを画面の40%に制限 */
+        max-width: 90%;
+        max-height: 80vh;
         height: auto;
         margin: 10px auto;
       }
       #image-box img.multi {
-        max-width: 28%; /* 3つ並べる場合の各画像の幅 */
-        max-height: 30vh; /* 各画像の最大高さを30%に制限 */
+        max-width: 28%;
+        max-height: 30vh;
         height: auto;
         margin: 10px;
       }
@@ -40,14 +40,14 @@
         font-size: 1em;
         cursor: pointer;
         margin-top: 20px;
-        display: none; /* 初期状態では非表示 */
+        display: none;
       }
       #audio-icon {
         position: absolute;
         top: 20px;
         right: 20px;
         width: 50px;
-        display: none; /* 初期状態では非表示 */
+        display: none;
       }
       .blinking {
         animation: blink 1s infinite;
@@ -66,7 +66,6 @@
     </style>
   </head>
   <body>
-    <!-- 画像を表示するボックス -->
     <div id="image-box">
       <img
         id="display-image"
@@ -76,24 +75,23 @@
       />
     </div>
 
-    <!-- 音声再生 -->
     <audio id="audio-player">
       <source id="audio-source" src="audios/IT-A01.wav" type="audio/wav" />
       あなたのブラウザは音声再生をサポートしていません。
     </audio>
 
-    <!-- 音声再生中に表示するアイコン -->
     <img id="audio-icon" src="Images/audio_icon.png" alt="音声アイコン" />
-
-    <!-- 「選択に進む」ボタン -->
     <button id="next-btn">選択に進む</button>
 
     <script>
       // 音声と画像のペアを定義
-      const media = [
+      const mediaMode1 = [
         { audio: "audios/IT-A01.wav", image: "Images/image_A.jpg" },
         { audio: "audios/IT-B01.wav", image: "Images/image_B.jpg" },
         { audio: "audios/IT-C01.wav", image: "Images/image_C.jpg" },
+      ];
+
+      const mediaMode2 = [
         {
           audio: "audios/IT-A02.wav",
           images: [
@@ -120,6 +118,29 @@
         },
       ];
 
+      const mediaMode3 = [
+        { audio: "audios/IT-A03.wav", image: "Images/image_A.jpg" },
+        { audio: "audios/IT-B03.wav", image: "Images/image_B.jpg" },
+        { audio: "audios/IT-C03.wav", image: "Images/image_C.jpg" },
+      ];
+
+      const mode = localStorage.getItem("selectedMode");
+      let media;
+
+      switch (mode) {
+        case "1":
+          media = mediaMode1;
+          break;
+        case "2":
+          media = mediaMode2;
+          break;
+        case "3":
+          media = mediaMode3;
+          break;
+        default:
+          media = mediaMode1;
+      }
+
       let currentIndex = 0;
       const audioPlayer = document.getElementById("audio-player");
       const audioSource = document.getElementById("audio-source");
@@ -127,51 +148,44 @@
       const nextButton = document.getElementById("next-btn");
       const audioIcon = document.getElementById("audio-icon");
 
-      // 音声再生開始時にアイコンを点滅させる
       function startBlinkingIcon() {
         audioIcon.style.display = "block";
         audioIcon.classList.add("blinking");
       }
 
-      // 音声再生終了時にアイコンを非表示にする
       function stopBlinkingIcon() {
         audioIcon.style.display = "none";
         audioIcon.classList.remove("blinking");
       }
 
-      // 音声再生終了時のイベントリスナー
       audioPlayer.addEventListener("ended", () => {
         currentIndex++;
         if (currentIndex < media.length) {
-          if (currentIndex < 3) {
-            // 1つずつ画像を表示する場合
-            imageBox.innerHTML = `<img src="${media[currentIndex].image}" alt="画像" class="single" />`;
-          } else {
-            // 4つ目以降は3つの画像を並べて表示する
+          if (mode === "2") {
+            // 3つの画像を表示
             imageBox.innerHTML = media[currentIndex].images
               .map((image) => `<img src="${image}" alt="画像" class="multi" />`)
               .join("");
+          } else {
+            // 1つの画像を表示
+            imageBox.innerHTML = `<img src="${media[currentIndex].image}" alt="画像" class="single" />`;
           }
 
           audioSource.src = media[currentIndex].audio;
           audioPlayer.load();
           audioPlayer.play();
-          startBlinkingIcon(); // アイコンを点滅開始
+          startBlinkingIcon();
         } else {
-          // 最後の音声の再生が終わったら停止
           audioPlayer.pause();
-          stopBlinkingIcon(); // アイコンの点滅停止
-          nextButton.style.display = "block"; // ボタンを表示
+          stopBlinkingIcon();
+          nextButton.style.display = "block";
         }
       });
 
-      // 初回の音声再生とアイコン点滅開始
       audioPlayer.play();
       startBlinkingIcon();
 
-      // 「選択に進む」ボタンがクリックされたときの処理
       document.getElementById("next-btn").addEventListener("click", () => {
-        // Select_Q1.html へ遷移
         window.location.href = "Select.html";
       });
     </script>

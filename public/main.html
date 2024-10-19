@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ITプロジェクト</title>
+    <style>
+      body {
+        display: flex;
+        justify-content: center;
+        align-items: center; /* 上部に配置 */
+        height: 100vh;
+        margin: 0;
+        font-family: Arial, sans-serif;
+        flex-direction: column;
+        position: relative; /* 相対位置に設定 */
+        overflow: hidden; /* 内容がはみ出さないようにする */
+      }
+      img {
+        display: block;
+        margin: 0 auto; /* 画像を中央に寄せる */
+        max-width: 90%;
+        max-height: 60vh; /* 高さを画面の40%に制限 */
+        height: auto;
+      }
+      #text-box {
+        width: 90%;
+        font-size: 1.2em;
+        margin: 20px auto; /* ボックスと画像の間に余白を追加 */
+        overflow: auto; /* テキストがはみ出さないように */
+      }
+      .button-container {
+        position: absolute; /* 絶対位置に変更 */
+        bottom: 20px; /* 画面下部からの距離 */
+        display: flex;
+        justify-content: space-between;
+        width: 200px;
+        left: 50%; /* 中央に配置 */
+        transform: translateX(-50%); /* 真ん中に配置 */
+      }
+      button {
+        padding: 10px 20px;
+        font-size: 1em;
+        cursor: pointer;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- 画像を表示するボックス -->
+    <div id="image-box">
+      <img id="display-image" src="Images/image_top.jpg" alt="表示中の画像" />
+    </div>
+
+    <!-- テキストを表示するボックス -->
+    <div id="text-box">
+      今回のプロジェクトは、チーム全員で新しいアプリのリリースに向けた最終確認を行っているところです。<br />​それぞれのメンバーが自分の専門分野に集中し、最終調整を進めています。
+    </div>
+
+    <!-- ボタンコンテナ -->
+    <div class="button-container">
+      <button id="prev-btn" disabled>戻る</button>
+      <button id="next-btn">進む</button>
+    </div>
+
+    <script>
+      // 画像とテキストのデータ
+      const texts = [
+        "今回のプロジェクトは、チーム全員で新しいアプリのリリースに向けた最終確認を行っているところです。<br>​それぞれのメンバーが自分の専門分野に集中し、最終調整を進めています。",
+        "Aさんは、開発チームのリーダーです。彼はプロジェクト全体を管理し、リリース直前に全体の進捗を把握しています。<br>「リリース」とは、アプリの新しいバージョンをユーザーに提供する瞬間を意味します。",
+        "BさんはUIデザイナーで、アプリの「UI」（ユーザーインターフェース）、つまり画面のデザインやレイアウトを担当しています。<br>Bさんは、ユーザーがアプリを「使いやすく」感じるように、レイアウトやデザインの微調整を行っています。<br>例えば、テキストの見やすさや、操作が直感的に行えるかを気にしています。",
+        "Cさんはバックエンドエンジニアです。<br>バックエンドとは、データの処理やサーバーとのやり取りを担う部分で、CさんはAPIを通じてフロントエンド（見た目や動作）にデータを提供しています。<br>彼は、レスポンスの速度やパフォーマンスが問題ないかに特に気を配っています。",
+        "私は、フロントエンドエンジニアとして、ユーザーが実際に操作する画面のデザインや動作を担当しています。<br>例えば、フォントサイズや、表示する画像のサイズ、配置がデバイスによって崩れないか、「レスポンシブデザイン」にも注意を払っています。<br>ユーザーの「操作性」を大切にしながら、動きの滑らかさや、ページの表示速度にも気を配る必要があります。",
+        "リリース前の最終確認ミーティングで、チーム全員が各自の視点から意見を出し合っています。",
+      ];
+
+      const images = [
+        "Images/image_top.jpg", // 最初の画像ファイル名
+        "Images/image_A.jpg", // 2番目の画像ファイル名
+        "Images/image_B.jpg",
+        "Images/image_C.jpg",
+        "Images/image_You.jpg",
+        "Images/image_top.jpg",
+      ];
+
+      let currentTextIndex = 0;
+
+      const textBox = document.getElementById("text-box");
+      const imageBox = document.getElementById("display-image");
+      const prevBtn = document.getElementById("prev-btn");
+      const nextBtn = document.getElementById("next-btn");
+
+      // ボタンの状態更新
+      function updateButtons() {
+        prevBtn.disabled = currentTextIndex === 0;
+        nextBtn.textContent =
+          currentTextIndex === texts.length - 1 ? "次へ" : "進む";
+      }
+
+      // 「進む」ボタンのクリックイベント
+      nextBtn.addEventListener("click", () => {
+        if (currentTextIndex < texts.length - 1) {
+          currentTextIndex++;
+          textBox.innerHTML = texts[currentTextIndex];
+          imageBox.src = images[currentTextIndex];
+          updateButtons();
+        } else {
+          window.location.href = "Question.html"; // 次のページに遷移
+        }
+      });
+
+      // 「戻る」ボタンのクリックイベント
+      prevBtn.addEventListener("click", () => {
+        if (currentTextIndex > 0) {
+          currentTextIndex--;
+          textBox.textContent = texts[currentTextIndex];
+          imageBox.src = images[currentTextIndex];
+          updateButtons();
+        }
+      });
+
+      updateButtons(); // 初期状態を更新
+    </script>
+  </body>
+</html>
