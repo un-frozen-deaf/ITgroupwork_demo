@@ -13,20 +13,57 @@
         margin: 0;
         font-family: Arial, sans-serif;
         flex-direction: column;
+        background-image: url("Images/image_top.jpg"); /* 背景画像 */
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+      }
+      h1 {
+        color: #fff;
+        background-color: rgba(0, 0, 0, 0.6); /* 半透明の背景 */
+        padding: 2rem;
+        border-radius: 0.5rem;
+        font-size: 2.5rem; /* フォントサイズを相対的に設定 */
+        text-align: center;
+        width: 90%; /* モニターに応じて幅を自動調整 */
+        max-width: 1200px;
+      }
+      h3 {
+        color: #fff;
+        background-color: rgba(0, 0, 0, 0.6);
+        padding: 1rem;
+        border-radius: 0.5rem;
+        margin-bottom: 2rem;
+        font-size: 1.8rem;
+        text-align: center;
+        width: 90%;
+        max-width: 1200px;
       }
       button {
-        padding: 10px 20px;
-        font-size: 1em;
+        padding: 1.5rem 3rem;
+        font-size: 1.5rem; /* ボタンのフォントサイズを相対的に */
         cursor: pointer;
-        margin: 10px;
+        margin: 1rem;
+        border: none;
+        border-radius: 0.5rem;
+        background-color: #ffcc00; /* 明るい黄色 */
+        color: #333;
+        transition: transform 0.3s ease, background-color 0.3s ease;
+        max-width: 400px; /* ボタンの最大幅を設定 */
+        width: 90%; /* ボタンの幅は画面サイズに応じて調整 */
+      }
+      button:hover {
+        background-color: #ff9900; /* ホバー時に色を少し濃く */
+        transform: scale(1.05); /* 少し拡大する */
       }
     </style>
   </head>
   <body>
-    <h1>モードを選択してください</h1>
-    <button onclick="selectMode(1)">モード 1</button>
-    <button onclick="selectMode(2)">モード 2</button>
-    <button onclick="selectMode(3)">モード 3</button>
+    <h1>フレンチレストランへようこそ！</h1>
+    <h3>聞きたい音声を選んでください。</h3>
+    <button onclick="selectMode(1)">Mode 1 聞こえにくい音声➀</button>
+    <button onclick="selectMode(2)">Mode 2 聞こえにくい音声②</button>
+    <button onclick="selectMode(3)">Mode 3 加工前音声（正解）</button>
 
     <script>
       function selectMode(mode) {
