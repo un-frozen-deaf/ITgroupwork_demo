@@ -67,16 +67,11 @@
   </head>
   <body>
     <div id="image-box">
-      <img
-        id="display-image"
-        src="Images/image_A.jpg"
-        alt="画像"
-        class="single"
-      />
+      <!-- 初期の画像は削除し、JavaScriptで設定 -->
     </div>
 
     <audio id="audio-player">
-      <source id="audio-source" src="audios/IT-A01.wav" type="audio/wav" />
+      <!-- 初期のaudio sourceも削除し、JavaScriptで設定 -->
       あなたのブラウザは音声再生をサポートしていません。
     </audio>
 
@@ -86,12 +81,39 @@
     <script>
       // 音声と画像のペアを定義
       const mediaMode1 = [
-        { audio: "audios/IT-A01.wav", image: "Images/image_A.jpg" },
-        { audio: "audios/IT-B01.wav", image: "Images/image_B.jpg" },
-        { audio: "audios/IT-C01.wav", image: "Images/image_C.jpg" },
+        { audio: "audios/IT-A01_S.wav", image: "Images/image_A.jpg" },
+        { audio: "audios/IT-B01_S.wav", image: "Images/image_B.jpg" },
+        { audio: "audios/IT-C01_S.wav", image: "Images/image_C.jpg" },
+        {
+          audio: "audios/IT-A02_S.wav",
+          images: [
+            "Images/image_A.jpg",
+            "Images/image_B.jpg",
+            "Images/image_C.jpg",
+          ],
+        },
+        {
+          audio: "audios/IT-B02_S.wav",
+          images: [
+            "Images/image_A.jpg",
+            "Images/image_B.jpg",
+            "Images/image_C.jpg",
+          ],
+        },
+        {
+          audio: "audios/IT-C02_S.wav",
+          images: [
+            "Images/image_A.jpg",
+            "Images/image_B.jpg",
+            "Images/image_C.jpg",
+          ],
+        },
       ];
 
       const mediaMode2 = [
+        { audio: "audios/IT-A01.wav", image: "Images/image_A.jpg" },
+        { audio: "audios/IT-B01.wav", image: "Images/image_B.jpg" },
+        { audio: "audios/IT-C01.wav", image: "Images/image_C.jpg" },
         {
           audio: "audios/IT-A02.wav",
           images: [
@@ -119,11 +141,36 @@
       ];
 
       const mediaMode3 = [
-        { audio: "audios/IT-A03.wav", image: "Images/image_A.jpg" },
-        { audio: "audios/IT-B03.wav", image: "Images/image_B.jpg" },
-        { audio: "audios/IT-C03.wav", image: "Images/image_C.jpg" },
+        { audio: "audios/IT-A01.wav", image: "Images/image_A.jpg" },
+        { audio: "audios/IT-B01.wav", image: "Images/image_B.jpg" },
+        { audio: "audios/IT-C01.wav", image: "Images/image_C.jpg" },
+        {
+          audio: "audios/IT-A02.wav",
+          images: [
+            "Images/image_A.jpg",
+            "Images/image_B.jpg",
+            "Images/image_C.jpg",
+          ],
+        },
+        {
+          audio: "audios/IT-B02.wav",
+          images: [
+            "Images/image_A.jpg",
+            "Images/image_B.jpg",
+            "Images/image_C.jpg",
+          ],
+        },
+        {
+          audio: "audios/IT-C02.wav",
+          images: [
+            "Images/image_A.jpg",
+            "Images/image_B.jpg",
+            "Images/image_C.jpg",
+          ],
+        },
       ];
 
+      // モードに応じたメディアデータを選択
       const mode = localStorage.getItem("selectedMode");
       let media;
 
@@ -143,10 +190,30 @@
 
       let currentIndex = 0;
       const audioPlayer = document.getElementById("audio-player");
-      const audioSource = document.getElementById("audio-source");
+      const audioSource = document.createElement("source"); // 音声ソースを動的に作成
+      audioPlayer.appendChild(audioSource);
       const imageBox = document.getElementById("image-box");
       const nextButton = document.getElementById("next-btn");
       const audioIcon = document.getElementById("audio-icon");
+
+      // 最初の画像と音声を設定
+      function loadMedia() {
+        if (media[currentIndex].images) {
+          // 複数の画像がある場合
+          imageBox.innerHTML = media[currentIndex].images
+            .map((image) => `<img src="${image}" alt="画像" class="multi" />`)
+            .join("");
+        } else {
+          // 単一の画像の場合
+          imageBox.innerHTML = `<img src="${media[currentIndex].image}" alt="画像" class="single" />`;
+        }
+
+        // 音声を設定して再生
+        audioSource.src = media[currentIndex].audio;
+        audioPlayer.load();
+        audioPlayer.play();
+        startBlinkingIcon();
+      }
 
       function startBlinkingIcon() {
         audioIcon.style.display = "block";
@@ -158,32 +225,19 @@
         audioIcon.classList.remove("blinking");
       }
 
+      // 音声再生終了後に次のメディアをロード
       audioPlayer.addEventListener("ended", () => {
         currentIndex++;
         if (currentIndex < media.length) {
-          if (mode === "2") {
-            // 3つの画像を表示
-            imageBox.innerHTML = media[currentIndex].images
-              .map((image) => `<img src="${image}" alt="画像" class="multi" />`)
-              .join("");
-          } else {
-            // 1つの画像を表示
-            imageBox.innerHTML = `<img src="${media[currentIndex].image}" alt="画像" class="single" />`;
-          }
-
-          audioSource.src = media[currentIndex].audio;
-          audioPlayer.load();
-          audioPlayer.play();
-          startBlinkingIcon();
+          loadMedia(); // 次の画像と音声をロード
         } else {
-          audioPlayer.pause();
           stopBlinkingIcon();
-          nextButton.style.display = "block";
+          nextButton.style.display = "block"; // ボタンを表示
         }
       });
 
-      audioPlayer.play();
-      startBlinkingIcon();
+      // ページ読み込み時に最初のメディアをロード
+      loadMedia();
 
       document.getElementById("next-btn").addEventListener("click", () => {
         window.location.href = "Select.html";
